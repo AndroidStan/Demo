@@ -1,7 +1,5 @@
 package com.example.connectivity;
 import com.example.model.Customer;
-import com.example.model.Employee;
-import com.example.model.Employees;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -54,7 +52,7 @@ public class MySQLConnector {
 
         sql.append(")");
 
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         try {
             statement = this.databaseConnection.prepareStatement(sql.toString());
         } catch (SQLException e) {
@@ -97,17 +95,19 @@ public class MySQLConnector {
     }
 
     public Customer readRecordBySearchString(String tableName, String searchColumn, String searchString){
-        String sql = "SELECT * FROM " + tableName + "WHERE " + searchColumn + " = " + searchString;
+        String sql = "SELECT * FROM " + tableName + " WHERE " + searchColumn + " = " + '"' + searchString + '"';
 
         Customer customer = new Customer();
 
-        Statement statement = null;
+        Statement statement;
         try {
             statement = this.databaseConnection.createStatement();
             ResultSet result = statement.executeQuery(sql);
 
-            customer.setFirstName(result.getString(1));
-            customer.setLastName(result.getString(2));
+            while (result.next()) {
+                customer.setFirstName(result.getString("firstname"));
+                customer.setLastName(result.getString("lastname"));
+            }
 
             statement.close();
         } catch (SQLException e) {
@@ -128,13 +128,13 @@ public class MySQLConnector {
 
             while (result.next()) {
                 Customer customer = new Customer();
-                customer.setFirstName(result.getString(1));
-                customer.setLastName(result.getString(2));
+                customer.setFirstName(result.getString("firstname"));
+                customer.setLastName(result.getString("lastname"));
 
                 customers.add(customer);
-
-                statement.close();
             }
+
+            statement.close();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
