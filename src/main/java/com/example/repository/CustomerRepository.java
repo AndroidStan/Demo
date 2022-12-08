@@ -19,7 +19,7 @@ public class CustomerRepository {
     public CustomerRepository(@Value("${url}") String dbUrl,
                               @Value("${user}") String username,
                               @Value("${password}") String password,
-                              @Value("$(customerTableName)") String customerTableName) {
+                              @Value("${customerTableName}") String customerTableName) {
         this.url = dbUrl;
         this.username = username;
         this.password = password;
