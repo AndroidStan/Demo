@@ -1,8 +1,11 @@
 package com.example.connectivity;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.example.model.Customer;
+import com.example.model.Employee;
+import com.example.model.Employees;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MySQLConnector {
@@ -28,7 +31,8 @@ public class MySQLConnector {
         }
     }
 
-    public void insertDatabaseRecord(String tableName,  Map<String, String> dbRecordData ) {
+    public Boolean insertDatabaseRecord(String tableName,  Map<String, String> dbRecordData ) {
+        boolean recordAdded = false;
         //dbRecordData contains keys - column names and values corresponding to the value of each column
         StringBuilder sql = new StringBuilder("INSERT INTO " + tableName + " (");
 
@@ -79,6 +83,7 @@ public class MySQLConnector {
 
         if(rows > 0) {
             System.out.println("A database table row data has been inserted!");
+            recordAdded = true;
         }
 
         try {
@@ -87,6 +92,55 @@ public class MySQLConnector {
             System.out.println("Statement close connection failed!");
             throw new RuntimeException(e);
         }
+
+        return recordAdded;
+    }
+
+    public Customer readRecordBySearchString(String tableName, String searchColumn, String searchString){
+        String sql = "SELECT * FROM " + tableName + "WHERE " + searchColumn + " = " + searchString;
+
+        Customer customer = new Customer();
+
+        Statement statement = null;
+        try {
+            statement = this.databaseConnection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+
+            customer.setFirstName(result.getString(1));
+            customer.setLastName(result.getString(2));
+
+            statement.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return customer;
+    }
+
+    public List<Customer> readAllRecords(String tableName){
+        String sql = "SELECT * FROM " + tableName;
+
+        List<Customer> customers = new ArrayList<>();
+
+        try {
+            Statement statement = this.databaseConnection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next()) {
+                Customer customer = new Customer();
+                customer.setFirstName(result.getString(1));
+                customer.setLastName(result.getString(2));
+
+                customers.add(customer);
+
+                statement.close();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return customers;
     }
 
 }
