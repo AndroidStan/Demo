@@ -25,7 +25,7 @@ public class CustomerController {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping(path = "/", produces = "application/json")
+    @GetMapping(path = "/customer", produces = "application/json")
     public Customer readCustomerByFirstName(@RequestParam("firstName") String firstName){
         return service.readCustomerByFirstName(firstName);
     }
