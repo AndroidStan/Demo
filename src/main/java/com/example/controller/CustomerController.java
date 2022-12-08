@@ -25,12 +25,12 @@ public class CustomerController {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping("/customer")
+    @GetMapping(path = "/", produces = "application/json")
     public Customer readCustomerByFirstName(@RequestParam("firstName") String firstName){
         return service.readCustomerByFirstName(firstName);
     }
 
-    @GetMapping("/customers")
+    @GetMapping(path = "/", produces = "application/json")
     public List<Customer> readAllCustomers(){
         return service.readAllCustomers();
     }
