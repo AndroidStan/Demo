@@ -30,7 +30,7 @@ public class CustomerController {
         return service.readCustomerByFirstName(firstName);
     }
 
-    @GetMapping(path = "/", produces = "application/json")
+    @GetMapping(produces = "application/json")
     public List<Customer> readAllCustomers(){
         return service.readAllCustomers();
     }
