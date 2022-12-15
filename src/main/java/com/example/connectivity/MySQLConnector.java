@@ -94,6 +94,24 @@ public class MySQLConnector {
         return recordAdded;
     }
 
+    public Boolean createCustomerTable() {
+        boolean tableCreated = false;
+
+        String sql = "CREATE TABLE IF NOT EXISTS \"customer\"  (  \"id\" VARCHAR(36) PRIMARY KEY, \"firstname\" VARCHAR(512), \"lastname\" VARCHAR(512) );";
+
+        Statement statement;
+        try {
+            statement = this.databaseConnection.createStatement();
+            tableCreated = statement.execute(sql);
+
+            statement.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return tableCreated;
+    }
+
     public Customer readRecordBySearchString(String tableName, String searchColumn, String searchString){
         String sql = "SELECT * FROM " + tableName + " WHERE " + searchColumn + " = " + '"' + searchString + '"';
 
