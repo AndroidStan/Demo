@@ -4,6 +4,7 @@ import com.example.DemoApplication;
 import com.example.connectivity.MySQLConnector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,12 +12,11 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest(
 		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 		classes = DemoApplication.class)
@@ -26,7 +26,7 @@ class CustomerControllerTest {
 	private int port;
 
 	@Autowired
-	private TestRestTemplate restTemplate = new TestRestTemplate();
+	private final TestRestTemplate restTemplate = new TestRestTemplate();
 	@Value("${url}")
 	private String url;
 	@Value("${user}")
@@ -36,10 +36,10 @@ class CustomerControllerTest {
 
 	@BeforeEach
 	public void init(){
-		MySQLConnector mySQLConnector = new MySQLConnector();
+		/*MySQLConnector mySQLConnector = new MySQLConnector();
 		mySQLConnector.connect(this.url, this.username, this.password);
 		mySQLConnector.createCustomerTable();
-		mySQLConnector.disconnect();
+		mySQLConnector.disconnect();*/
 	}
 
 	@Test
