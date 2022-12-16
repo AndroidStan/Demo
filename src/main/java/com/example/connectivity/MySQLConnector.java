@@ -97,7 +97,7 @@ public class MySQLConnector {
     public Boolean createCustomerTable() {
         boolean tableCreated = false;
 
-        String sql = "CREATE TABLE IF NOT EXISTS \"customer\"  (  \"id\" VARCHAR(36) PRIMARY KEY, \"firstname\" VARCHAR(512), \"lastname\" VARCHAR(512) );";
+        String sql = "CREATE TABLE IF NOT EXISTS customer ( \"id\" VARCHAR(36) PRIMARY KEY, \"firstname\" VARCHAR(512), \"lastname\" VARCHAR(512) );";
 
         Statement statement;
         try {
