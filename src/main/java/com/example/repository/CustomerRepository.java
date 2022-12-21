@@ -47,7 +47,7 @@ public class CustomerRepository {
         MySQLConnector mySQLConnector = new MySQLConnector();
         mySQLConnector.connect(this.url, this.username, this.password);
 
-        Customer customer = mySQLConnector.readRecordBySearchString(this.customerTableName, "firstname", "Ayeah");
+        Customer customer = mySQLConnector.readRecordBySearchString(this.customerTableName, "firstname", firstName);
 
         mySQLConnector.disconnect();
         return customer;

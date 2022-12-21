@@ -20,7 +20,7 @@ public class Customer {
     @Override
     public String toString()
     {
-        return "Employee [firstName=" + firstName +
+        return "Customer [firstName=" + firstName +
                 ", lastName=" + lastName + "]";
     }
 

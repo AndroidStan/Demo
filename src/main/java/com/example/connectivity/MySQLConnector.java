@@ -113,7 +113,7 @@ public class MySQLConnector {
     }
 
     public Customer readRecordBySearchString(String tableName, String searchColumn, String searchString){
-        String sql = "SELECT * FROM " + tableName + " WHERE " + searchColumn + " = " + '"' + searchString + '"';
+        String sql = "SELECT * FROM " + tableName + " WHERE " + searchColumn + " = " + '\'' + searchString + '\'';
 
         Customer customer = new Customer();
 
