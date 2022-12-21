@@ -7,6 +7,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -36,11 +38,11 @@ class CustomerControllerTest {
 	@Autowired
 	private TestRestTemplate restTemplate = new TestRestTemplate();
 	@Value("${url}")
-	private String url;
+/*	private String url;
 	@Value("${user}")
 	private String username;
 	@Value("${password}")
-	private String password;
+	private String password;*/
 
 	@BeforeEach
 	public void init(){
@@ -50,15 +52,16 @@ class CustomerControllerTest {
 		mySQLConnector.disconnect();*/
 	}
 
-	@Test
+	@ParameterizedTest(name="Adding customer {index} => firstname={0}, lastName={1}")
+	@CsvSource({ "Pencho, Baichev", "Stako, Mishev"})
 	@Order(1)
-	void testInsertCustomerAndValidateResponse() {
+	void testInsertCustomerAndValidateResponse(String firstName, String lastName) {
 		String url = "http://localhost:" + port + "/customers/";
 		System.out.println("POST: url = " + url);
 
 		Customer customer = new Customer();
-		customer.setFirstName("Pencho");
-		customer.setLastName("Baichev");
+		customer.setFirstName(firstName);
+		customer.setLastName(lastName);
 
 		ResponseEntity<String> response = restTemplate.postForEntity(url, customer, String.class);
 
@@ -68,10 +71,11 @@ class CustomerControllerTest {
 		assertThat(response.getBody()).isEqualTo(null);
 	}
 
-	@Test
+	@ParameterizedTest(name="Verifying customer with firstname {0} exists!")
+	@CsvSource({ "Pencho, Baichev"})
 	@Order(2)
-	void testGetSingleCustomer() {
-		String url = "http://localhost:" + port + "/customers/customer?firstName=Pencho";
+	void testGetSingleCustomer(String firstName, String lastName) {
+		String url = "http://localhost:" + port + "/customers/customer?firstName=" + firstName;
 		System.out.println("GET: url = " + url);
 
 		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -81,8 +85,8 @@ class CustomerControllerTest {
 		assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
 
 		Customer customer = new Customer();
-		customer.setFirstName("Pencho");
-		customer.setLastName("Baichev");
+		customer.setFirstName(firstName);
+		customer.setLastName(lastName);
 
 		Customer responseCustomer;
 
@@ -95,9 +99,10 @@ class CustomerControllerTest {
 		assertThat(responseCustomer).usingRecursiveComparison().isEqualTo(customer);
 	}
 
-	@Test
+	@ParameterizedTest(name="Verifying {0},{1} and {2},{3} exists!")
+	@CsvSource({ "Pencho, Baichev, Stako, Mishev"})
 	@Order(3)
-	void testGetCustomersCollection() {
+	void testGetCustomersCollection(String customer1FirstName, String customer1LastName, String customer2FirstName, String customer2LastName ) {
 		String url = "http://localhost:" + port + "/customers";
 		System.out.println("GET: url = " + url);
 		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -108,11 +113,15 @@ class CustomerControllerTest {
 
 		List<Customer> customers = new ArrayList<>();
 
-		Customer customer = new Customer();
-		customer.setFirstName("Pencho");
-		customer.setLastName("Baichev");
+		Customer firstCustomer = new Customer();
+		firstCustomer.setFirstName(customer1FirstName);
+		firstCustomer.setLastName(customer1LastName);
+		customers.add(firstCustomer);
 
-		customers.add(customer);
+		Customer secondCustomer = new Customer();
+		secondCustomer.setFirstName(customer2FirstName);
+		secondCustomer.setLastName(customer2LastName);
+		customers.add(secondCustomer);
 
 		String customersJson;
 		try {
