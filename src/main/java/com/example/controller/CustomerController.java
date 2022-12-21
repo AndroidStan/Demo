@@ -16,7 +16,7 @@ public class CustomerController {
     @Autowired
     private CustomerService service;
 
-    @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public Customer insertCustomer(@RequestBody Customer customer)
     {
         return service.insertCustomer(customer);
