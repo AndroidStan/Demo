@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 import com.example.model.Customer;
-import com.example.connectivity.MySQLConnector;
+import com.example.connectivity.DBConnector;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -29,36 +29,36 @@ public class CustomerRepository {
     public Customer insertCustomer(Customer customer){
         Boolean recordSuccessfullyInserted;
 
-        MySQLConnector mySQLConnector = new MySQLConnector();
-        mySQLConnector.connect(this.url, this.username, this.password);
+        DBConnector dbConnector = new DBConnector();
+        dbConnector.connect(this.url, this.username, this.password);
 
         Map<String, String> databaseRecordData = new HashMap<>();
         databaseRecordData.put("firstname", customer.getFirstName());
         databaseRecordData.put("lastname", customer.getLastName());
 
-        recordSuccessfullyInserted = mySQLConnector.insertDatabaseRecord(this.customerTableName, databaseRecordData);
+        recordSuccessfullyInserted = dbConnector.insertDatabaseRecord(this.customerTableName, databaseRecordData);
 
-        mySQLConnector.disconnect();
+        dbConnector.disconnect();
 
         return recordSuccessfullyInserted ? customer : null;
     }
 
     public Customer readCustomerByFirstName(String firstName) {
-        MySQLConnector mySQLConnector = new MySQLConnector();
-        mySQLConnector.connect(this.url, this.username, this.password);
+        DBConnector dbConnector = new DBConnector();
+        dbConnector.connect(this.url, this.username, this.password);
 
-        Customer customer = mySQLConnector.readRecordBySearchString(this.customerTableName, "firstname", firstName);
+        Customer customer = dbConnector.readRecordBySearchString(this.customerTableName, "firstname", firstName);
 
-        mySQLConnector.disconnect();
+        dbConnector.disconnect();
         return customer;
     }
     public List<Customer> readAllCustomers(){
-        MySQLConnector mySQLConnector = new MySQLConnector();
-        mySQLConnector.connect(this.url, this.username, this.password);
+        DBConnector dbConnector = new DBConnector();
+        dbConnector.connect(this.url, this.username, this.password);
 
-        List<Customer> customers = mySQLConnector.readAllRecords(this.customerTableName);
+        List<Customer> customers = dbConnector.readAllRecords(this.customerTableName);
 
-        mySQLConnector.disconnect();
+        dbConnector.disconnect();
         return customers;
     }
 }

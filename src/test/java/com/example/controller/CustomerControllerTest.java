@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.DemoApplication;
-import com.example.connectivity.MySQLConnector;
 import com.example.model.Customer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,7 +67,20 @@ class CustomerControllerTest {
 		System.out.println("response.getStatusCode() = " + response.getStatusCode());
 		System.out.println("response.getBody() = " + response.getBody());
 		assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-		assertThat(response.getBody()).isEqualTo(null);
+
+
+		String customerJson;
+		try {
+			customerJson = new ObjectMapper().writeValueAsString(customer);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+
+		try {
+			JSONAssert.assertEquals(customerJson, response.getBody(), JSONCompareMode.STRICT);
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@ParameterizedTest(name="Verifying customer with firstname {0} exists!")

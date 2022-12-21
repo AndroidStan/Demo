@@ -17,12 +17,9 @@ public class CustomerController {
     private CustomerService service;
 
     @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Customer> insertCustomer(@RequestBody Customer customer)
+    public Customer insertCustomer(@RequestBody Customer customer)
     {
-        service.insertCustomer(customer);
-        URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/").buildAndExpand().toUri();
-
-        return ResponseEntity.created(location).build();
+        return service.insertCustomer(customer);
     }
 
     @GetMapping(path = "/customer", produces = "application/json")
