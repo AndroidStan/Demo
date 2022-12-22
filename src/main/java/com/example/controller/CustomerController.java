@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.websocket.server.PathParam;
 import java.net.URI;
 import java.util.List;
 
@@ -22,9 +23,14 @@ public class CustomerController {
         return service.insertCustomer(customer);
     }
 
-    @GetMapping(path = "/customer", produces = "application/json")
+    @GetMapping(path = "/search", produces = "application/json")
     public Customer readCustomerByFirstName(@RequestParam("firstName") String firstName){
         return service.readCustomerByFirstName(firstName);
+    }
+
+    @GetMapping(path = "/{customerId}", produces = "application/json")
+    public Customer readCustomerByID(@PathVariable String customerId){
+        return service.readCustomerById(customerId);
     }
 
     @GetMapping(produces = "application/json")
