@@ -52,6 +52,16 @@ public class CustomerRepository {
         dbConnector.disconnect();
         return customer;
     }
+
+    public Customer readCustomerById(String customerId) {
+        DBConnector dbConnector = new DBConnector();
+        dbConnector.connect(this.url, this.username, this.password);
+
+        Customer customer = dbConnector.readRecordBySearchString(this.customerTableName, "id", customerId);
+
+        dbConnector.disconnect();
+        return customer;
+    }
     public List<Customer> readAllCustomers(){
         DBConnector dbConnector = new DBConnector();
         dbConnector.connect(this.url, this.username, this.password);
