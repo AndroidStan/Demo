@@ -16,6 +16,10 @@ public class CustomerService {
         return repository.insertCustomer(customer);
     }
 
+    public Customer readCustomerById(String customerId) {
+        return repository.readCustomerById(customerId);
+    }
+
     public Customer readCustomerByFirstName(String firstName) {
         return repository.readCustomerByFirstName(firstName);
     }
