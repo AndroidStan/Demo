@@ -83,11 +83,38 @@ class CustomerControllerTest {
 		}
 	}
 
+	@Test
+	@Order(2)
+	void testGetCustomerById(){
+		String url = "http://localhost:" + port + "/customers/1";
+		System.out.println("GET: url = " + url);
+
+		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+		System.out.println("response.getStatusCode() = " + response.getStatusCode());
+		System.out.println("response.getBody() = " + response.getBody());
+		assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+
+		Customer customer = new Customer();
+		customer.setFirstName("Pencho");
+		customer.setLastName("Baichev");
+
+		Customer responseCustomer;
+
+		try {
+			responseCustomer = new ObjectMapper().readValue(response.getBody(), Customer.class);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+
+		assertThat(responseCustomer).usingRecursiveComparison().isEqualTo(customer);
+	}
+
 	@ParameterizedTest(name="Verifying customer with firstname {0} exists!")
 	@CsvSource({ "Pencho, Baichev"})
-	@Order(2)
+	@Order(3)
 	void testGetSingleCustomer(String firstName, String lastName) {
-		String url = "http://localhost:" + port + "/customers/customer?firstName=" + firstName;
+		String url = "http://localhost:" + port + "/customers/search?firstName=" + firstName;
 		System.out.println("GET: url = " + url);
 
 		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -111,9 +138,9 @@ class CustomerControllerTest {
 		assertThat(responseCustomer).usingRecursiveComparison().isEqualTo(customer);
 	}
 
-	@ParameterizedTest(name="Verifying {0},{1} and {2},{3} exists!")
+	@ParameterizedTest(name="Verifying {0},{1} and {2},{3} exist!")
 	@CsvSource({ "Pencho, Baichev, Stako, Mishev"})
-	@Order(3)
+	@Order(4)
 	void testGetCustomersCollection(String customer1FirstName, String customer1LastName, String customer2FirstName, String customer2LastName ) {
 		String url = "http://localhost:" + port + "/customers";
 		System.out.println("GET: url = " + url);
