@@ -36,8 +36,8 @@ class CustomerControllerTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate = new TestRestTemplate();
-	@Value("${url}")
-/*	private String url;
+/*	@Value("${url}")
+	private String url;
 	@Value("${user}")
 	private String username;
 	@Value("${password}")
@@ -67,7 +67,6 @@ class CustomerControllerTest {
 		System.out.println("response.getStatusCode() = " + response.getStatusCode());
 		System.out.println("response.getBody() = " + response.getBody());
 		assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-
 
 		String customerJson;
 		try {
