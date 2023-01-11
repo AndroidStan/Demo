@@ -42,7 +42,8 @@ public class EmployeeController {
     // to the list
     @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
 
-    public ResponseEntity<Object> addEmployee(@RequestBody Employee employee)
+    //public ResponseEntity<Object> addEmployee(@RequestBody Employee employee)
+    public Employee addEmployee(@RequestBody Employee employee)
     {
         // Creating an ID of an employee
         // from the number of employees
@@ -51,8 +52,8 @@ public class EmployeeController {
 
         employeeDao.addEmployee(employee);
 
-        URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(employee.getId()).toUri();
-
-        return ResponseEntity.created(location).build();
+/*        URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(employee.getId()).toUri();
+        return ResponseEntity.created(location).build();*/
+        return employee;
     }
 }
