@@ -98,6 +98,12 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.5</version>
+				<!-- Excludes meaningless classes and packages for the code coverage check -->
+				<configuration>
+					<excludes>
+						<exclude>com/example/DemoApplication.class</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
